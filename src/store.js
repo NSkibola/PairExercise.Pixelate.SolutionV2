@@ -11,20 +11,33 @@ import loggerMiddleware from 'redux-logger'
 const initialState = {
   grid: [
     Array(20).fill('')
-  ]
+  ],
+  selectedColor: 'red'
 }
 
 // ACTION TYPES
 const ADDROW = 'ADDROW'
+const SELECTCOLOR = 'SELECTCOLOR'
+const CHANGECOLOR = 'CHANGECOLOR'
 
 // ACTION CREATORS
-const addRow = { type: ADDROW}
+export const addRow = { type: ADDROW}
+export const selectColor = (color) => ({ type: SELECTCOLOR, color})
+export const changeColor = (row,column) => ({type: CHANGECOLOR, row, column})
 
 // And we'll revisit this reducer.
 function reducer (state = initialState, action) {
   switch (action.type) {
     case ADDROW:
-      return
+      const newRow =  Array(20).fill('');
+      return { ...state, grid: [...state.grid, newRow]}
+    case SELECTCOLOR:
+      return { ...state, selectedColor: action.color }
+    case CHANGECOLOR:
+      const newTable = [...state.grid]
+      newTable[action.row] = [...newTable[action.row]]
+      newTable[action.row][action.column] = state.selectedColor
+      return { ...state, grid: newTable }
     default:
       return state
   }
